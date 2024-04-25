@@ -23,9 +23,35 @@ pathToBackendApps="/Users/fmckenna/NHERI/SimCenterBackendApplications"
 pathToOpenSees="/Users/fmckenna/bin/OpenSees3.6.0"
 pathToDakota="/Users/fmckenna/dakota-6.12.0"
 
+# remove & rebuild app and macdeploy it
+
+DMG_METHOD="NEW"
+
+for arg in "$@"
+do
+    if [ "$arg" == "--old" ] || [ "$arg" == "-o" ] || [ $arg == "-OLD" ]; then
+	DMG_METHOD="OLD"
+    fi
+done
+
+#
+#PARAMETERS
+#
+
+APP_NAME="quoFEM"
+APP_FILE="quoFEM.app"
+DMG_FILENAME="${APP_NAME}_Mac_Download.dmg"
+
+QTDIR="/Users/fmckenna/Qt/5.15.2/clang_64/"
+
+pathToBackendApps="/Users/fmckenna/NHERI/SimCenterBackendApplications"
+pathToOpenSees="/Users/fmckenna/bin/OpenSees3.6.0"
+pathToDakota="/Users/fmckenna/dakota-6.12.0"
+
 
 mkdir -p build
 cd build
+rm -fr ${APP_FILE} ${DMG_FILENAME}
 rm -fr ${APP_FILE} ${DMG_FILENAME}
 
 #
@@ -38,6 +64,21 @@ qmake ../quoFEM.pro
 status=$?; if [[ $status != 0 ]]; then echo "qmake failed"; exit $status; fi
 make
 status=$?; if [[ $status != 0 ]]; then echo "make failed"; exit $status; fi
+
+#
+# Check to see if the app built
+#
+
+if ! [ -x "$(command -v open $pathApp)" ]; then
+	echo "$APP_FILE did not build. Exiting."
+	exit 
+fi
+
+#
+# macdeployqt it
+#
+
+macdeployqt ./${APP_FILE}
 
 #
 # Check to see if the app built
@@ -71,6 +112,10 @@ mkdir  ./$APP_FILE/Contents/MacOS/applications/opensees
 mkdir  ./$APP_FILE/Contents/MacOS/applications/dakota
 cp -fr $pathToOpenSees/* ./$APP_FILE/Contents/MacOS/applications/opensees
 cp -fr $pathToDakota/*  ./$APP_FILE/Contents/MacOS/applications/dakota
+mkdir  ./$APP_FILE/Contents/MacOS/applications/opensees
+mkdir  ./$APP_FILE/Contents/MacOS/applications/dakota
+cp -fr $pathToOpenSees/* ./$APP_FILE/Contents/MacOS/applications/opensees
+cp -fr $pathToDakota/*  ./$APP_FILE/Contents/MacOS/applications/dakota
 
 #
 # Copy Example files
@@ -87,14 +132,23 @@ rm -fr ./quoFEM.app/Contents/MacOS/Examples/.gitignore
 #
 
 find ./$APP_FILE -name __pycache__ -exec rm -rf {} +;
+# clean up:
+#   1/ remove any __pyache__ files
+#
+
+find ./$APP_FILE -name __pycache__ -exec rm -rf {} +;
 
 #
+# load my credential file
 # load my credential file
 #
 
 userID="../userID.sh"
 
 if [ ! -f "$userID" ]; then
+
+    echo "creating dmg $DMG_FILENAME"
+    hdiutil create $DMG_FILENAME -fs HFS+ -srcfolder ./$APP_FILE -format UDZO -volname $APP_NAME
 
     echo "creating dmg $DMG_FILENAME"
     hdiutil create $DMG_FILENAME -fs HFS+ -srcfolder ./$APP_FILE -format UDZO -volname $APP_NAME
@@ -105,6 +159,7 @@ fi
 source $userID
 
 
+#
 #
 # create dmg
 #
