@@ -29,9 +29,9 @@ for:
        - rm -rf SimCenterBackendApplications
        - rm -rf quoFEM
        - rm -rf SimCenterCommon
-       - git clone https://github.com/NHERI-SimCenter/SimCenterBackendApplications.git
-       - git clone https://github.com/NHERI-SimCenter/SimCenterCommon.git
-       - git clone https://github.com/NHERI-SimCenter/quoFEM.git
+       - git clone https://github.com/JustinBonus/SimCenterBackendApplications.git
+       - git clone https://github.com/JustinBonus/SimCenterCommon.git
+       - git clone https://github.com/JustinBonus/quoFEM.git
 
     build_script:
     
@@ -76,9 +76,9 @@ for:
        - pip install conan==1.60.1
        - conan user
        - conan remote add simcenter https://nherisimcenter.jfrog.io/artifactory/api/conan/simcenter
-       - git clone https://github.com/NHERI-SimCenter/SimCenterBackendApplications.git
-       - git clone https://github.com/NHERI-SimCenter/SimCenterCommon.git
-       - git clone https://github.com/NHERI-SimCenter/quoFEM.git
+       - git clone https://github.com/JustinBonus/SimCenterBackendApplications.git
+       - git clone https://github.com/JustinBonus/SimCenterCommon.git
+       - git clone https://github.com/JustinBonus/quoFEM.git
        
     build_script:
     
@@ -102,7 +102,6 @@ for:
 
   # Visual Studio 2019
   -
-  
     matrix:
       only:
         - image: Visual Studio 2019
@@ -128,9 +127,9 @@ for:
        - cmd: rm -rf SimCenterBackendApplications
        - cmd: rm -rf SimCenterCommon
        - cmd: rm -rf quoFEM
-       - cmd: git clone https://github.com/NHERI-SimCenter/SimCenterBackendApplications.git    
-       - cmd: git clone https://github.com/NHERI-SimCenter/SimCenterCommon.git
-       - cmd: git clone https://github.com/NHERI-SimCenter/quoFEM.git
+       - cmd: git clone https://github.com/JustinBonus/SimCenterBackendApplications.git    
+       - cmd: git clone https://github.com/JustinBonus/SimCenterCommon.git
+       - cmd: git clone https://github.com/JustinBonus/quoFEM.git
        - cmd: dir
 
     build_script:
