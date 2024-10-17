@@ -4,11 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts concurrent network printsupport 3dcore 3drender 3dextras webenginewidgets
+QT       += core gui charts concurrent network printsupport 3dcore 3drender 3dextras webenginewidgets webengine
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
+QMAKE_APPLE_DEVICE_ARCHS="x86_64"
 
 TARGET = quoFEM
 TEMPLATE = app
@@ -36,7 +37,9 @@ win32 {
     ICON = icons/NHERI-quoFEM-Icon.icns
     QMAKE_INFO_PLIST=$$PWD/Info.plist    
     } else {
-      LIBS += -lglut -lGLU -lGL
+    LIBS += -lglut -lGLU -lGL
+    target.path = /usr/local/bin
+    INSTALLS += target
     }
 }
 
